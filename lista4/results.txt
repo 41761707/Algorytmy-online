@@ -1,0 +1,28 @@
+Eksperyment dla grafu torusa trójwymiarowego:
+--------------------------------------------------
+Jednostajny rozkład:
+MOVE-TO-MIN (średni koszt): 6.143675523626727
+FLIP (średni koszt): 6.047281228080141
+
+Harmoniczny rozkład:
+MOVE-TO-MIN (średni koszt): 4.663603519118584
+FLIP (średni koszt): 5.314051130749295
+
+Dwuharmoniczny rozkład:
+MOVE-TO-MIN (średni koszt): 2.066361663077501
+FLIP (średni koszt): 2.5345406975517855
+
+Eksperyment dla grafu hiperkostki:
+--------------------------------------------------
+Jednostajny rozkład:
+MOVE-TO-MIN (średni koszt): 6.046077895362487
+FLIP (średni koszt): 6.053607073724402
+
+Harmoniczny rozkład:
+MOVE-TO-MIN (średni koszt): 4.757244049292752
+FLIP (średni koszt): 4.594474693442883
+
+Dwuharmoniczny rozkład:
+MOVE-TO-MIN (średni koszt): 1.9810647280907396
+FLIP (średni koszt): 1.923926159315339
+
