@@ -6,25 +6,26 @@ import networkx as nx # Biblioteka implementująca graf
 # Implementacja algorytmów
 def move_to_min(graph, sequence):
     total_cost = 0
-    #page_position = random.randint(0,num_vertices-1)
-    page_position = 0
+    page_position = random.randint(0,num_vertices-1)
     #print("PAGE POSITION: ",page_position)
     current_sequence = []
     for a in range(len(sequence)):
         #print("PAGE POSITION: ",page_position)
-        current_sequence.append(sequence[a])
         if (a+1) % 32 == 0:
             #print(current_sequence)
             values = []
+            #print("A: ",a)
+            #print(current_sequence)
             for j in range(graph.number_of_nodes()):
                 values.append(sum(nx.shortest_path_length(graph, source=current, target=j) for current in current_sequence))
             #print(values)
-            tmp_page_position = current_sequence.index(min(current_sequence))
+            tmp_page_position = values.index(min(values))
             server_swap_cost = nx.shortest_path_length(graph, source=tmp_page_position, target=page_position)
             total_cost = total_cost +  (32 * server_swap_cost)
             #print(f"SWAP {tmp_page_position} - {page_position}, dystans: {server_swap_cost}")
             page_position = tmp_page_position
             current_sequence.clear()
+        current_sequence.append(sequence[a])
         if page_position == sequence[a]:
             continue
         dist = nx.shortest_path_length(graph, source=sequence[a], target=page_position)
@@ -37,7 +38,7 @@ def move_to_min(graph, sequence):
 def flip(graph, sequence):
     num_vertices = graph.number_of_nodes()
     #page_position = random.randint(0,num_vertices-1)
-    page_position = 0
+    page_position = random.randint(0,num_vertices-1)
     total_cost = 0
 
     for request in sequence:
@@ -89,14 +90,13 @@ torus_graph = nx.Graph()
 hypercube_graph = nx.Graph()
 
 # Dodawanie krawędzi do grafu torusa trójwymiarowego
-'''for i in range(num_vertices):
+for i in range(num_vertices):
     torus_graph.add_edge(i, (i + 1) % num_vertices)
     torus_graph.add_edge(i, (i - 1) % num_vertices)
     torus_graph.add_edge(i, (i + 8) % num_vertices)
     torus_graph.add_edge(i, (i - 8) % num_vertices)
     torus_graph.add_edge(i, (i + 16) % num_vertices)
     torus_graph.add_edge(i, (i - 16) % num_vertices)
-    '''
 '''
 side_length = int(num_vertices ** (1/3))
 for i in range(num_vertices):
@@ -119,13 +119,13 @@ for i in range(num_vertices):
 
 # Dodawanie krawędzi do grafu hiperkostki
 for i in range(num_vertices):
-    for j in range(i + 1, num_vertices):
+    for j in range(num_vertices):
         if bin(i ^ j).count('1') == 1:
             #print(f"{i} - {j}")
             hypercube_graph.add_edge(i, j)
 # Parametry eksperymentu
 sequence_length = 1024
-num_trials = 100
+num_trials = 1000
 
 for graph_type in [torus_graph,hypercube_graph]:
     # Eksperyment dla grafu torusa trójwymiarowego
@@ -145,7 +145,7 @@ for graph_type in [torus_graph,hypercube_graph]:
     all_uniform_costs_flips = []
     for _ in range(num_trials):
         uniform_sequence = generate_uniform_sequence(sequence_length, num_vertices)
-        uniform_costs_move_to_min = uniform_costs_move_to_min + move_to_min(torus_graph, uniform_sequence)
+        uniform_costs_move_to_min = uniform_costs_move_to_min + move_to_min(graph_type, uniform_sequence)
         uniform_costs_move_to_min = uniform_costs_move_to_min / sequence_length
         all_uniform_costs_move_to_min.append(uniform_costs_move_to_min)
         uniform_costs_flip = uniform_costs_flip + flip(graph_type, uniform_sequence)
@@ -164,7 +164,7 @@ for graph_type in [torus_graph,hypercube_graph]:
     all_harmonic_costs_flips = []
     for _ in range(num_trials):
         harmonic_sequence = generate_harmonic_sequence(sequence_length, num_vertices)
-        harmonic_costs_move_to_min = harmonic_costs_move_to_min + move_to_min(torus_graph, harmonic_sequence)
+        harmonic_costs_move_to_min = harmonic_costs_move_to_min + move_to_min(graph_type, harmonic_sequence)
         harmonic_costs_move_to_min = harmonic_costs_move_to_min / sequence_length
         all_harmonic_costs_move_to_min.append(harmonic_costs_move_to_min)
         
@@ -185,7 +185,8 @@ for graph_type in [torus_graph,hypercube_graph]:
     all_two_harmonic_costs_flips = []
     for _ in range(num_trials):
         two_harmonic_sequence = generate_two_harmonic_sequence(sequence_length, num_vertices)
-        two_harmonic_costs_move_to_min = two_harmonic_costs_move_to_min + move_to_min(torus_graph, two_harmonic_sequence)
+        #print(two_harmonic_sequence)
+        two_harmonic_costs_move_to_min = two_harmonic_costs_move_to_min + move_to_min(graph_type, two_harmonic_sequence)
         two_harmonic_costs_move_to_min = two_harmonic_costs_move_to_min / sequence_length
         all_two_harmonic_costs_move_to_min.append(two_harmonic_costs_move_to_min)
 
